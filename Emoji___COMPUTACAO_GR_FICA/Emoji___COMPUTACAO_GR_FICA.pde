@@ -1,4 +1,5 @@
 void setup(){
+  frameRate(20);
   size(500, 500);
   
 }
@@ -52,7 +53,7 @@ public class Face{
   
   private void drawFace(){
     fill(255, 255, 0);
-    ellipse(positionX +  state, positionY, heightFace, widthFace);
+    ellipse(positionX, positionY, heightFace, widthFace);
     noFill();
     
     
@@ -82,7 +83,7 @@ public class Mouth{
   
   private void drawMouth(){
     fill(0);
-    ellipse(positionX, positionY, widthMouth, heightMouth);
+    ellipse(positionX, positionY, widthMouth, heightMouth + state);
     noFill();
   }
 }
@@ -108,7 +109,7 @@ public class Eye {
   
   private void drawEye(){
     fill(0);
-    ellipse(positionX, positionY, widthEye, heightEye);
+    ellipse(positionX, positionY, widthEye + state, heightEye + state);
     noFill();
     this.eyebrow = new Eyebrow(positionX, positionY - 40, this.state);
   }
@@ -127,6 +128,6 @@ public class Eyebrow {
   }
   
   void drawEyebrow() {  
-    bezier(startPosition + state, heightEyebrow + state * -1, startPosition + 10 + state, heightEyebrow - 30 + state * -1, startPosition + 20 + state, heightEyebrow - 30 + state * -1, startPosition + 30 + state, heightEyebrow + state * -1);
+    bezier(startPosition, heightEyebrow + state * -1, startPosition + 10 + state, heightEyebrow - 30 + state * -1, startPosition + 20 + state, heightEyebrow - 30 + state * -1, startPosition + 30 + state, heightEyebrow + state * -1);
   }
 }
