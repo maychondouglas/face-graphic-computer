@@ -1,29 +1,33 @@
 void setup(){
-  frameRate(20);
+  frameRate(10);
   size(500, 500);
   
 }
-
+int horizontalPosition = 1;
 int state = 0;
 boolean isGoingFoward = true;
 
 void draw() {
-  background(255);
- Face myFace = new Face(150, 150, 200, 200, state);
+ background(255);
+ Face myFace = new Face(150, 150, 200, 200, state, horizontalPosition);
 
  if (state < 10 && isGoingFoward) {
   state++; 
+  horizontalPosition+=3;
  } else {
   if (state > 0 && !isGoingFoward) {
     state--;
+    horizontalPosition-=3;
   } 
  }
  if (state == 10) {
   isGoingFoward = false; 
+  horizontalPosition=-10;
  }
  
  if (state == 0) {
   isGoingFoward = true;
+  horizontalPosition=-10;
  }
 
 }
@@ -40,13 +44,15 @@ public class Face{
   
   // controla qual a posição dos elementos da face
   private int state;
+  private int horizontalPosition;
   
-  Face(float positionX, float positionY, float widthFace, float heightFace, int state){
+  Face(float positionX, float positionY, float widthFace, float heightFace, int state, int horizontalPosition){
     this.positionX = positionX;
     this.positionY = positionY;
     this.heightFace = heightFace;
     this.widthFace = widthFace;
     this.state = state;
+    this.horizontalPosition = horizontalPosition;
     
     drawFace();
   }
@@ -57,9 +63,10 @@ public class Face{
     noFill();
     
     
-    leftEye = new Eye(positionX - 40, positionY - 20, widthFace * 0.13, heightFace * 0.2, this.state);
-    rightEye = new Eye(positionX + 40, positionY - 20, widthFace * 0.13, heightFace * 0.2, this.state);
-    myMouth = new Mouth(positionX, positionY + 50, widthFace * 0.3, heightFace * 0.4, this.state);
+    leftEye = new Eye(positionX - 40 + horizontalPosition, positionY - 20, widthFace * 0.13, heightFace * 0.2, this.state);
+    rightEye = new Eye(positionX + 40 + horizontalPosition, positionY - 20, widthFace * 0.13, heightFace * 0.2, this.state);
+    
+    myMouth = new Mouth(positionX + horizontalPosition, positionY + 50, widthFace * 0.3, heightFace * 0.4, this.state);
   }
   
 }
@@ -83,7 +90,11 @@ public class Mouth{
   
   private void drawMouth(){
     fill(0);
-    ellipse(positionX, positionY, widthMouth, heightMouth + state);
+    if(state < 5){
+      ellipse(positionX, positionY, widthMouth-state, widthMouth-state);
+    }else{
+      ellipse(positionX, positionY, widthMouth, heightMouth + state);
+    }
     noFill();
   }
 }
@@ -108,10 +119,20 @@ public class Eye {
   }
   
   private void drawEye(){
-    fill(0);
-    ellipse(positionX, positionY, widthEye + state, heightEye + state);
-    noFill();
-    this.eyebrow = new Eyebrow(positionX, positionY - 40, this.state);
+    
+    if(state == 5){
+      fill(0);
+      ellipse(positionX, positionY, widthEye + state, 3 + state);
+      noFill();
+      
+      this.eyebrow = new Eyebrow(positionX, positionY - 40, this.state);
+    }else{
+      fill(0);
+      ellipse(positionX, positionY, widthEye + state, heightEye + state);
+      noFill();
+      this.eyebrow = new Eyebrow(positionX, positionY - 40, this.state);
+    }
+    
   }
 }
 
@@ -128,6 +149,12 @@ public class Eyebrow {
   }
   
   void drawEyebrow() {  
+    
+    strokeWeight(5);
     bezier(startPosition, heightEyebrow + state * -1, startPosition + 10 + state, heightEyebrow - 30 + state * -1, startPosition + 20 + state, heightEyebrow - 30 + state * -1, startPosition + 30 + state, heightEyebrow + state * -1);
+    strokeWeight(2);
+    
+    
+    
   }
 }
